@@ -29,11 +29,23 @@ services:
     build:
       context: "."
       args:
-        SDC_LIBS: streamsets-datacollector-apache-kafka_2_0-lib,streamsets-datacollector-google-cloud-lib
+        SDC_LIBS: streamsets-datacollector-apache-kafka_2_0-lib,streamsets-datacollector-hdp_2_6-lib
     environment:
       DIVOLTE_KAFKA_BROKER_LIST: kafka:9092
     ports:
       - 18630:18630
     volumes:
       - ./sdc-data:/data
-      - ./credentials:/opt/credentials
+      - ./credentials:/opt/credentials  # StreamSets container
+
+  hdfs:
+    image: mdouchement/hdfs
+    ports:
+      - "22022:22"
+      - "8020:8020"
+      - "50010:50010"
+      - "50020:50020"
+      - "50070:50070"
+      - "50075:50075"
+    depends_on:
+      - kafka
